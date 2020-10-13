@@ -195,14 +195,14 @@ defmodule PhoenixSwagger.Path do
   """
   def parameter(path = %PathObject{}, name, location, type, description, opts \\ []) do
     param = %Parameter{
-      name: name,
+      description: description,
       in: location,
-      description: description
+      name: name,
+      type: type
     }
     param = case location do
-      :body -> %{param | schema: type}
-      :path -> %{param | type: type, required: true}
-      _ -> %{param | type: type}
+      :path -> %{param | required: true}
+      _ -> param
     end
     param = Map.merge(param, opts |> Enum.into(%{}, &translate_parameter_opt/1))
     params = path.operation.parameters
